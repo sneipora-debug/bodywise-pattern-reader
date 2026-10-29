@@ -14,7 +14,118 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      assessment_media: {
+        Row: {
+          assessment_id: string
+          created_at: string
+          id: string
+          kind: string
+          label: string | null
+          mime_type: string
+          storage_path: string
+          user_id: string
+          view: string
+        }
+        Insert: {
+          assessment_id: string
+          created_at?: string
+          id?: string
+          kind: string
+          label?: string | null
+          mime_type: string
+          storage_path: string
+          user_id?: string
+          view: string
+        }
+        Update: {
+          assessment_id?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          label?: string | null
+          mime_type?: string
+          storage_path?: string
+          user_id?: string
+          view?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_media_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      assessments: {
+        Row: {
+          analyzed_at: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          patient_id: string
+          result: Json | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          analyzed_at?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          patient_id: string
+          result?: Json | null
+          status?: string
+          user_id?: string
+        }
+        Update: {
+          analyzed_at?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          patient_id?: string
+          result?: Json | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessments_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patients: {
+        Row: {
+          birth_date: string | null
+          complaint: string | null
+          created_at: string
+          id: string
+          name: string
+          user_id: string
+        }
+        Insert: {
+          birth_date?: string | null
+          complaint?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          user_id?: string
+        }
+        Update: {
+          birth_date?: string | null
+          complaint?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
