@@ -42,16 +42,16 @@ function Page() {
   async function create(e: React.FormEvent) {
     e.preventDefault();
     const { data: p, error } = await supabase.from("patients").insert({ name, complaint: complaint || null }).select().single();
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     const { data: a, error: aErr } = await supabase.from("assessments").insert({ patient_id: p.id }).select().single();
-    if (aErr) return toast.error(aErr.message);
+    if (aErr) { toast.error(aErr.message); return; }
     qc.invalidateQueries({ queryKey: ["patients"] });
     navigate({ to: "/avaliacao/$id", params: { id: a.id } });
   }
 
   async function newAssessment(patientId: string) {
     const { data: a, error } = await supabase.from("assessments").insert({ patient_id: patientId }).select().single();
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     navigate({ to: "/avaliacao/$id", params: { id: a.id } });
   }
 

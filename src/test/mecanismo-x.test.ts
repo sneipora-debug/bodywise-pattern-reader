@@ -11,7 +11,7 @@ describe("Mecanismo X rules", () => {
     expect(VIDEO_SLOTS).toHaveLength(5);
   });
   it("top 5 keeps at most 5, ordered by largest deviation, only catalog items", () => {
-    const ids = DYSFUNCTIONS.slice(0, 7).map((d) => d.id);
+    const ids = DYSFUNCTIONS.slice(0, 7).map((d) => d.id) as [string, string, string, string, string, string, string];
     const out = rankTop5([f(ids[0], 2), f(ids[1], 9), f("invalido", 10), f(ids[2], 5), f(ids[3], 7), f(ids[4], 1), f(ids[5], 8)]);
     expect(out.map((o) => o.severity)).toEqual([9, 8, 7, 5, 2]);
   });

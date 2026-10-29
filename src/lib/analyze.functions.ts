@@ -21,10 +21,11 @@ export const analyzeAssessment = createServerFn({ method: "POST" })
     if (sErr || !signed) throw new Error(sErr?.message ?? "Falha ao acessar as fotos.");
 
     const photos = media.map((m, i) => ({
-      url: signed[i].signedUrl,
+      url: signed[i]?.signedUrl ?? "",
       label: `${VIEW_LABEL[m.view as View]} – ${PHOTO_SLOTS.find((s) => s.key === m.label)?.label ?? m.label}`,
     }));
 
+    if (photos.some((p) => !p.url)) throw new Error("Falha ao acessar as fotos.");
     const { analyzePhotos } = await import("./analyze.server");
     const result = await analyzePhotos(photos);
 

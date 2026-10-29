@@ -63,14 +63,14 @@ function Page() {
   const photoCount = (media ?? []).filter((m) => m.kind === "photo").length;
   const result = assessment?.result as AnalysisResult | null;
 
-  async function upload(file: File, slot: string, kind: "photo" | "video", view: string) {
+  async function upload(file: File, slot: string, kind: "photo" | "video", view: string): Promise<void> {
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) return;
     const ext = file.name.split(".").pop() ?? "bin";
     const path = `${u.user.id}/${id}/${slot}-${Date.now()}.${ext}`;
     const t = toast.loading("Enviando…");
     const { error } = await supabase.storage.from("avaliacoes").upload(path, file, { contentType: file.type });
-    if (error) return toast.error(error.message, { id: t });
+    if (error) { toast.error(error.message, { id: t }); return; }
     const old = byLabel.get(slot);
     if (old) {
       await supabase.from("assessment_media").delete().eq("id", old.id);
@@ -79,7 +79,7 @@ function Page() {
     const { error: e2 } = await supabase
       .from("assessment_media")
       .insert({ assessment_id: id, kind, view, label: slot, storage_path: path, mime_type: file.type });
-    if (e2) return toast.error(e2.message, { id: t });
+    if (e2) { toast.error(e2.message, { id: t }); return; }
     toast.success("Enviado", { id: t });
     qc.invalidateQueries({ queryKey: ["media", id] });
   }
@@ -144,7 +144,7 @@ function Page() {
 }
 
 function Slot({ label, media, lines, accept, onFile }: {
-  label: string; media?: Media; lines: boolean; accept: string; onFile: (f: File) => void;
+  label: string; media: Media | undefined; lines: boolean; accept: string; onFile: (f: File) => void;
 }) {
   return (
     <label className="group block cursor-pointer">

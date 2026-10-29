@@ -39,7 +39,7 @@ export async function analyzePhotos(
   photos: { url: string; label: string }[],
   signal?: AbortSignal,
 ): Promise<AnalysisResult> {
-  const apiKey = process.env.LOVABLE_API_KEY;
+  const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new Error("Chave da IA não configurada.");
   const provider = createOpenAI({
     baseURL: "https://ai.gateway.lovable.dev/v1",
@@ -58,7 +58,7 @@ export async function analyzePhotos(
     instructions: INSTRUCTIONS,
     messages: [{ role: "user", content }],
     output: Output.object({ schema }),
-    abortSignal: signal,
+    ...(signal ? { abortSignal: signal } : {}),
     providerOptions: {
       openai: {
         forceReasoning: true,
