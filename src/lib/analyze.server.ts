@@ -47,10 +47,10 @@ export async function analyzePhotos(
     headers: { "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
   });
 
-  const content: Array<{ type: "text"; text: string } | { type: "image"; image: URL }> = [];
+  const content: Array<{ type: "text"; text: string } | { type: "file"; data: URL; mediaType: string }> = [];
   for (const p of photos) {
     content.push({ type: "text", text: `Foto: ${p.label}` });
-    content.push({ type: "image", image: new URL(p.url) });
+    content.push({ type: "file", data: new URL(p.url), mediaType: "image/jpeg" });
   }
 
   const result = streamText({
